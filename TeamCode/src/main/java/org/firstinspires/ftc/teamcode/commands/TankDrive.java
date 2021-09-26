@@ -2,79 +2,51 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.Vector2D;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.subsystems.Gyro;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class TankDrive extends CommandBase {
 
     private final DriveTrain m_DriveTrain;
 
-    private final DoubleSupplier leftY;
-    private final DoubleSupplier leftX;
-    private final DoubleSupplier rightX;
+    private final Gyro gyro;
 
-    Vector2D joyVec;
+    private final DoubleSupplier leftY, leftX, rightX;
+    private final BooleanSupplier mode;
 
-//    private enum QUADRANT{
-//        FIRST,
-//        SECOND,
-//        THIRD,
-//        FOURTH
-//    }
+    boolean state = false;
 
-
-    public TankDrive(DriveTrain m_DriveTrain, DoubleSupplier leftY, DoubleSupplier leftX, DoubleSupplier rightX) {
+    public TankDrive(DriveTrain m_DriveTrain, Gyro gyro, DoubleSupplier leftY, DoubleSupplier leftX, DoubleSupplier rightX, BooleanSupplier mode) {
         this.m_DriveTrain = m_DriveTrain;
+        this.gyro = gyro;
 
         this.leftY = leftY;
         this.leftX = leftX;
         this.rightX = rightX;
 
-        joyVec = new Vector2D(leftX.getAsDouble(), leftY.getAsDouble());
-        addRequirements(m_DriveTrain);
+        this.mode = mode;
+
+        addRequirements(m_DriveTrain, gyro);
     }
 
     @Override
     public void execute() {
-        //QUADRANT quadrant = getQuadrant();
+        if(mode.getAsBoolean()){
+            state = !state;
 
-        double x = leftX.getAsDouble();
-        double y = leftY.getAsDouble();
-        joyVec.update(x, y);
-
-        m_DriveTrain.set(x + y, -x + y, -x + y, x + y);
-
-
-        if (rightX.getAsDouble() != 0) {
-            m_DriveTrain.set(rightX.getAsDouble(), -rightX.getAsDouble());
-        } else {
-            if (x == 0 || y == 0) {
-                m_DriveTrain.set(y);
-            } else {
-                m_DriveTrain.set(x + y, -x + y, -x + y, x + y);
-            }
         }
 
-/*
-        switch(quadrant){
-            case FIRST:
-                m_DriveTrain.set(x + y, -x + y, -x + y, x + y);
-                break;
-            case SECOND:
-                m_DriveTrain.set(x + y, -x + y, -x + y, x + y);
-                break;
-            case THIRD:
-                m_DriveTrain.set(x + y, -x + y, -x + y, x + y);
-                break;
-            case FOURTH:
-                m_DriveTrain.set(x + y, -x + y, -x + y, x + y);
-                break;
+        if(state){
+            m_DriveTrain.driveFieldCentric(leftX.getAsDouble(), leftY.getAsDouble(), rightX.getAsDouble(), gyro.getAngle());
+        }else{
+            m_DriveTrain.driveRobotCentric(leftX.getAsDouble(), leftY.getAsDouble(), rightX.getAsDouble());
         }
-*/
-
     }
+
+
     @Override
     public boolean isFinished() {
         return false;
@@ -83,23 +55,7 @@ public class TankDrive extends CommandBase {
 
     @Override
     public void end(boolean interuppted){
-        m_DriveTrain.set(0);
+        m_DriveTrain.stop();
     }
-
-//    public QUADRANT getQuadrant(){
-//        double x = leftX.getAsDouble();
-//        double y = leftY.getAsDouble();
-//
-//        if(x > 0 && y > 0){
-//            return QUADRANT.FIRST;
-//        }else if(x < 0 && y > 0){
-//            return QUADRANT.SECOND;
-//        }else if(x < 0 && y < 0){
-//            return QUADRANT.THIRD;
-//        }else{
-//            return QUADRANT.FOURTH;
-//        }
-//
-//    }
 
 }
