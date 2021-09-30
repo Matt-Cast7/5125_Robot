@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Gyro;
 
@@ -15,11 +16,17 @@ public class TankDrive extends CommandBase {
     private final Gyro gyro;
 
     private final DoubleSupplier leftY, leftX, rightX;
-    private final BooleanSupplier mode;
 
-    boolean state = false;
+    private final BooleanSupplier reset;
 
-    public TankDrive(DriveTrain m_DriveTrain, Gyro gyro, DoubleSupplier leftY, DoubleSupplier leftX, DoubleSupplier rightX, BooleanSupplier mode) {
+    private final Telemetry telemetry;
+
+    static boolean state = false;
+
+    public TankDrive(DriveTrain m_DriveTrain,
+                     Gyro gyro, DoubleSupplier leftY, DoubleSupplier leftX, DoubleSupplier rightX,
+                     BooleanSupplier reset,
+                     Telemetry telemetry) {
         this.m_DriveTrain = m_DriveTrain;
         this.gyro = gyro;
 
@@ -27,23 +34,37 @@ public class TankDrive extends CommandBase {
         this.leftX = leftX;
         this.rightX = rightX;
 
-        this.mode = mode;
+        this.reset = reset;
+
+        this.telemetry = telemetry;
 
         addRequirements(m_DriveTrain, gyro);
     }
 
     @Override
     public void execute() {
-        if(mode.getAsBoolean()){
-            state = !state;
 
+
+
+        if(reset.getAsBoolean()){
+            gyro.resetAngle();
         }
 
         if(state){
             m_DriveTrain.driveFieldCentric(leftX.getAsDouble(), leftY.getAsDouble(), rightX.getAsDouble(), gyro.getAngle());
+
         }else{
             m_DriveTrain.driveRobotCentric(leftX.getAsDouble(), leftY.getAsDouble(), rightX.getAsDouble());
         }
+        if(state){
+            telemetry.addLine()
+                    .addData("Field Centric", "");
+        }else{
+            telemetry.addLine()
+                    .addData("Driver Centric", "");
+        }
+
+        telemetry.update();
     }
 
 
