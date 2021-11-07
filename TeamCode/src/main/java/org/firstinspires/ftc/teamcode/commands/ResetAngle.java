@@ -2,15 +2,19 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-public class DriveMode extends CommandBase {
+import org.firstinspires.ftc.teamcode.subsystems.Gyro;
 
-    public DriveMode(){
+public class ResetAngle extends CommandBase {
 
+    private Gyro gyro;
+
+    public ResetAngle(Gyro gyro){
+        this.gyro = gyro;
     }
 
     @Override
     public void execute() {
-        MecanumDriveTrain.state = !MecanumDriveTrain.state;
+        gyro.resetAngle();
     }
 
     @Override

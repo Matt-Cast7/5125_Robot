@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,32 +10,27 @@ import org.firstinspires.ftc.teamcode.subsystems.Gyro;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-public class TankDrive extends CommandBase {
+public class MecanumDriveTrain extends CommandBase {
 
     private final DriveTrain m_DriveTrain;
 
     private final Gyro gyro;
 
-    private final DoubleSupplier leftY, leftX, rightX;
-
-    private final BooleanSupplier reset;
+    private final DoubleSupplier forward, strafe, turn;
 
     private final Telemetry telemetry;
 
-    static boolean state = false;
+    public static boolean state = false;
 
-    public TankDrive(DriveTrain m_DriveTrain,
-                     Gyro gyro, DoubleSupplier leftY, DoubleSupplier leftX, DoubleSupplier rightX,
-                     BooleanSupplier reset,
-                     Telemetry telemetry) {
+    public MecanumDriveTrain(DriveTrain m_DriveTrain,
+                             Gyro gyro, DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn,
+                             Telemetry telemetry) {
         this.m_DriveTrain = m_DriveTrain;
         this.gyro = gyro;
 
-        this.leftY = leftY;
-        this.leftX = leftX;
-        this.rightX = rightX;
-
-        this.reset = reset;
+        this.forward = forward;
+        this.strafe = strafe;
+        this.turn = turn;
 
         this.telemetry = telemetry;
 
@@ -44,27 +40,23 @@ public class TankDrive extends CommandBase {
     @Override
     public void execute() {
 
-
-
-        if(reset.getAsBoolean()){
-            gyro.resetAngle();
-        }
-
         if(state){
-            m_DriveTrain.driveFieldCentric(leftX.getAsDouble(), leftY.getAsDouble(), rightX.getAsDouble(), gyro.getAngle());
-
-        }else{
-            m_DriveTrain.driveRobotCentric(leftX.getAsDouble(), leftY.getAsDouble(), rightX.getAsDouble());
-        }
-        if(state){
+            m_DriveTrain.driveFieldCentric(strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble(), gyro.getAngle());
             telemetry.addLine()
                     .addData("Field Centric", "");
+
         }else{
+            m_DriveTrain.driveRobotCentric(strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble());
             telemetry.addLine()
-                    .addData("Driver Centric", "");
+                    .addData("Robot Centric", "");
+
         }
 
+        telemetry.addLine().addData("Angle", gyro.getAngle());
+
+
         telemetry.update();
+
     }
 
 

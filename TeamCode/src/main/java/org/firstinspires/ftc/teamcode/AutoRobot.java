@@ -24,16 +24,5 @@ public class AutoRobot extends CommandOpMode {
 
     }
 
-
-
-
-
-//    @Override
-//    public void runOpMode() throws InterruptedException {
-//        super.runOpMode();
-//        waitForStart();
-//
-//
-//
-//    }
+    
 }
