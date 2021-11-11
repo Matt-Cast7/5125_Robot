@@ -26,10 +26,17 @@ public class DriveTrain extends SubsystemBase {
         bL = new MotorEx(hwMap, "bL", Constants.CPR, Constants.RPM);
         bR = new MotorEx(hwMap, "bR", Constants.CPR, Constants.RPM);
 
+
+        fL.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        fR.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        bL.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        bR.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
         drive = new MecanumDrive(fL, fR, bL, bR);
 
         leftmotors = new MotorGroup(fL, bL);
         rightmotors = new MotorGroup(fR, bR);
+
 
     }
 

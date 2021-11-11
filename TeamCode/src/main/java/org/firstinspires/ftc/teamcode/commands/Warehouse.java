@@ -20,7 +20,7 @@ public class Warehouse extends CommandBase {
     public void execute() {
 
         driveTime(1000, -0.25, 0, 0);
-        driveTime(2500, 0, .80, 0);
+        driveTime(2500, 0, .85, 0);
     }
 
     void driveTime(long time, double strafe, double forward, double turn){
