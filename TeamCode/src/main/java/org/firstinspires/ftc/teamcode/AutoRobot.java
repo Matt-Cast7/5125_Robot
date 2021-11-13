@@ -7,22 +7,26 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.Warehouse;
+import org.firstinspires.ftc.teamcode.mode.Auto;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 
 
 @Autonomous(name="AutoRobot")
 public class AutoRobot extends CommandOpMode {
 
-    private Command warehouse;
-    private DriveTrain driveTrain;
+    public Telemetry a_telemetry;
 
+    private RobotContainer m_robotcontainer;
 
     @Override
     public void initialize(){
-        driveTrain = new DriveTrain(hardwareMap);
-        warehouse = new Warehouse(driveTrain);
-        warehouse.schedule();
+        this.a_telemetry = super.telemetry;
+
+        m_robotcontainer = new RobotContainer(hardwareMap, Auto.AUTONOMOUS);
+
+        m_robotcontainer.getAutoCommand().schedule();
 
     }
 

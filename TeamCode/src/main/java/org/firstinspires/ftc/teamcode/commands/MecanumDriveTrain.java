@@ -13,19 +13,25 @@ public class MecanumDriveTrain extends CommandBase {
 
     private final DriveTrain m_DriveTrain;
 
-    private final Gyro gyro;
-
     private final DoubleSupplier forward, strafe, turn;
 
     private final Telemetry telemetry;
 
     public static boolean state = false;
 
-    public MecanumDriveTrain(DriveTrain m_DriveTrain,
-                             Gyro gyro, DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn,
+
+    /**
+     *
+     * @param m_DriveTrain drive train subsystem
+     * @param forward forward values
+     * @param strafe strafing values
+     * @param turn turning values
+     * @param telemetry telemetry object for telemetry
+     */
+    public MecanumDriveTrain(DriveTrain m_DriveTrain, DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn,
                              Telemetry telemetry) {
         this.m_DriveTrain = m_DriveTrain;
-        this.gyro = gyro;
+
 
         this.forward = forward;
         this.strafe = strafe;
@@ -33,14 +39,14 @@ public class MecanumDriveTrain extends CommandBase {
 
         this.telemetry = telemetry;
 
-        addRequirements(m_DriveTrain, gyro);
+        addRequirements(m_DriveTrain);
     }
 
     @Override
     public void execute() {
 
         if(state){
-            m_DriveTrain.driveFieldCentric(strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble(), gyro.getAngle());
+            m_DriveTrain.driveFieldCentric(strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble(), Gyro.globalAngle);
             telemetry.addLine()
                     .addData("Field Centric", "");
 
@@ -51,7 +57,7 @@ public class MecanumDriveTrain extends CommandBase {
 
         }
 
-        telemetry.addLine().addData("Angle", gyro.getAngle());
+        telemetry.addLine().addData("Angle", Gyro.globalAngle);
 
 
         telemetry.update();
