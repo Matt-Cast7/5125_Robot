@@ -32,8 +32,6 @@ public class TeleRobot extends CommandOpMode {
         m_robotcontainer.getTeleOpCommands().schedule();
 
 
-
-
     }
 
 }

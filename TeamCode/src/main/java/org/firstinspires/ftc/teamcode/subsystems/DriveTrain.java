@@ -59,9 +59,9 @@ public class DriveTrain extends SubsystemBase {
 
         leftmotors = new MotorGroup(fL, bL);
         rightmotors = new MotorGroup(fR, bR);
-        allmotors = new MotorGroup(fL, fR, bL, bR);
+        //allmotors = new MotorGroup(fL, fR, bL, bR);
 
-        allmotors.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        //allmotors.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
 
     }
