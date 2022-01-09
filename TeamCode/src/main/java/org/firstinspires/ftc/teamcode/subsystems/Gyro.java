@@ -12,9 +12,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Gyro extends SubsystemBase {
 
-    Orientation             lastAngles = new Orientation();
+    static Orientation             lastAngles = new Orientation();
     public static double                  globalAngle;
-    BNO055IMU gyro;
+    static BNO055IMU gyro;
 
     public Gyro(final HardwareMap hwMap){
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -39,15 +39,15 @@ public class Gyro extends SubsystemBase {
 
     }
 
-    public void resetAngle()
+    public static void resetAngle()
     {
-        lastAngles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        lastAngles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
 
         globalAngle = 0;
     }
 
 
-    public double getAngle()
+    public static double getAngle()
     {
         // We experimentally determined the Z axis is the axis we want to use for heading angle.
         // We have to process the angle because the imu works in euler angles so the Z axis is

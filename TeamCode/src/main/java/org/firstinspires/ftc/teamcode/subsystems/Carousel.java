@@ -18,12 +18,17 @@ public class Carousel extends SubsystemBase {
 
     }
 
-    public void spin() {
-        carousel.set(0.2);
+    public void spin(boolean red) {
+        if(red){
+            carousel.set(0.2);
+        }else{
+            carousel.set(-0.2);
+        }
     }
 
-    public void spin(DoubleSupplier trigger) {
-        carousel.set(trigger.getAsDouble());
+    public void spin(DoubleSupplier rtrigger, DoubleSupplier ltrigger) {
+
+        carousel.set(rtrigger.getAsDouble() - ltrigger.getAsDouble());
     }
 
     public void set(double power) {

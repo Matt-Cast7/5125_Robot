@@ -103,7 +103,7 @@ public class DriveTrain extends SubsystemBase {
 
     public void driveDistance(Vector2d displacement, double power){
 
-        Vector2d[] vectors = Constants.robotWheelVectors(displacement);
+        //Vector2d[] vectors = Constants.robotWheelVectors(displacement);
 
 //        while(getDistanceTraveled() < displacement.magnitude()){
 //

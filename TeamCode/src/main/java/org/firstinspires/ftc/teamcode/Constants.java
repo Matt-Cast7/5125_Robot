@@ -29,17 +29,5 @@ public class Constants {
      * @param displacement
      * @return
      */
-    public static Vector2d[] robotWheelVectors(Vector2d displacement){
-
-        double a = ((double)displacement.getX() + (double)displacement.getY())/2.0;
-        double b = (-(double)displacement.getX() + (double)displacement.getY())/2.0;
-
-        Vector2d vecA = new Vector2d(a, a);
-        Vector2d vecB = new Vector2d(-b, b);
-
-        return new Vector2d[]{vecA, vecB};
-
-
-    }
 
 }

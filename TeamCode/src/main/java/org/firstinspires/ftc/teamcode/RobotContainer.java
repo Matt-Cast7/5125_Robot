@@ -5,14 +5,24 @@ import static org.firstinspires.ftc.teamcode.TeleRobot.joy1;
 import static org.firstinspires.ftc.teamcode.TeleRobot.joy2;
 import static org.firstinspires.ftc.teamcode.TeleRobot.t_telemetry;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.kinematics.HolonomicOdometry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.commands.CarouselBlue;
+import org.firstinspires.ftc.teamcode.commands.CarouselRed;
+import org.firstinspires.ftc.teamcode.commands.GoToStorageBlue;
+import org.firstinspires.ftc.teamcode.commands.GoToStorageRed;
 import org.firstinspires.ftc.teamcode.commands.MecanumDriveTrain;
+import org.firstinspires.ftc.teamcode.commands.Park;
+import org.firstinspires.ftc.teamcode.commands.ParkRed;
+import org.firstinspires.ftc.teamcode.commands.Turn;
 import org.firstinspires.ftc.teamcode.commands.Warehouse;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.mode.Auto;
 import org.firstinspires.ftc.teamcode.mode.Tele;
 import org.firstinspires.ftc.teamcode.commands.DriveMode;
@@ -28,12 +38,25 @@ public class RobotContainer {
     public DriveTrain m_DriveTrain;
     public Gyro gyro;
     public Carousel carousel;
+    public SampleMecanumDrive drive;
 
     public Command mecanumDrive;
 
     public Command switchMode;
     public Command resetAngle;
     public Command spinCarousel;
+
+    public Command redAllianceCarousel;
+    public Command blueAllianceCarousel;
+    public Command toStorageRED;
+    public Command toStorageBLUE;
+
+    public Command parkRed;
+    public Command parkBlue;
+
+    public Command spin;
+    public Command turn;
+
 
     public Warehouse warehouse;
 
@@ -46,6 +69,7 @@ public class RobotContainer {
         carousel = new Carousel(hwMap);
 
         mecanumDrive = new MecanumDriveTrain(m_DriveTrain,
+                gyro,
                 joy1::getLeftY,
                 joy1::getLeftX,
                 joy1::getRightX,
@@ -55,7 +79,10 @@ public class RobotContainer {
         switchMode = new DriveMode();
         resetAngle = new ResetAngle(gyro);
 
-        spinCarousel = new SpinCarousel(carousel, () -> TeleRobot.joy2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER));
+        spinCarousel = new SpinCarousel(carousel, () -> TeleRobot.joy2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
+                () -> joy2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
+
+
 
 
      //   odometry = new Odo(new HolonomicOdometry())
@@ -74,31 +101,66 @@ public class RobotContainer {
     }
 
     public ParallelCommandGroup getTeleOpCommands(){
+        new GamepadButton(joy1, GamepadKeys.Button.BACK).whenReleased(switchMode);
         return new ParallelCommandGroup(mecanumDrive, spinCarousel);
     }
 
 
 
 
-    public RobotContainer(HardwareMap hwMap, Auto a){
+    public RobotContainer(HardwareMap hwMap, Auto a, boolean red){
 
         gyro = new Gyro(hwMap);
         m_DriveTrain = new DriveTrain(hwMap);
         carousel = new Carousel(hwMap);
 
+
         warehouse = new Warehouse(m_DriveTrain);
+        drive = new SampleMecanumDrive(hwMap);
+
+
+
+
+
+        if(red){
+
+            redAllianceCarousel = new CarouselRed(drive);
+            toStorageRED = new GoToStorageRed(drive);
+            spin = new SpinCarousel(carousel, true);
+            parkRed = new Park(drive, true);
+
+
+
+
+        }else{
+            blueAllianceCarousel = new CarouselBlue(drive);
+            toStorageBLUE = new GoToStorageBlue(drive);
+            spin = new SpinCarousel(carousel, false);
+            parkBlue = new Park(drive, false);
+
+        }
 
 
 
     }
 
 
-    public Command getAutoCommand(){
-        return warehouse;
+
+
+    public Command getParkRed(){
+        return parkRed;
+    }
+    public Command getParkBlue(){
+        return parkBlue;
     }
 
+    public Command getBlueAuto(){
 
+        return new SequentialCommandGroup(blueAllianceCarousel, spin, new Turn(drive, 30), toStorageBLUE);
+    }
 
-
+    public Command getRedAuto(){
+        return new SequentialCommandGroup(redAllianceCarousel, spin, toStorageRED);
+    }
 
 }
