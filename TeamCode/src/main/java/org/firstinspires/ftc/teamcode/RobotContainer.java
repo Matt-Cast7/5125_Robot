@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.commands.CarouselBlue;
 import org.firstinspires.ftc.teamcode.commands.CarouselRed;
+import org.firstinspires.ftc.teamcode.commands.ControlArm;
+import org.firstinspires.ftc.teamcode.commands.ControlFeeder;
 import org.firstinspires.ftc.teamcode.commands.GoToStorageBlue;
 import org.firstinspires.ftc.teamcode.commands.GoToStorageRed;
 import org.firstinspires.ftc.teamcode.commands.MecanumDriveTrain;
@@ -28,6 +30,7 @@ import org.firstinspires.ftc.teamcode.mode.Tele;
 import org.firstinspires.ftc.teamcode.commands.DriveMode;
 import org.firstinspires.ftc.teamcode.commands.ResetAngle;
 import org.firstinspires.ftc.teamcode.commands.SpinCarousel;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Gyro;
@@ -39,6 +42,7 @@ public class RobotContainer {
     public Gyro gyro;
     public Carousel carousel;
     public SampleMecanumDrive drive;
+    public Arm arm;
 
     public Command mecanumDrive;
 
@@ -57,6 +61,9 @@ public class RobotContainer {
     public Command spin;
     public Command turn;
 
+    public Command controlArm;
+    public Command controlFeeder;
+
 
     public Warehouse warehouse;
 
@@ -67,6 +74,8 @@ public class RobotContainer {
         gyro = new Gyro(hwMap);
         m_DriveTrain = new DriveTrain(hwMap);
         carousel = new Carousel(hwMap);
+
+        arm = new Arm(hwMap);
 
         mecanumDrive = new MecanumDriveTrain(m_DriveTrain,
                 gyro,
@@ -82,6 +91,8 @@ public class RobotContainer {
         spinCarousel = new SpinCarousel(carousel, () -> TeleRobot.joy2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
                 () -> joy2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
 
+        controlArm = new ControlArm(arm, () -> joy2.getLeftX(), () -> joy2.getLeftY());
+        controlFeeder = new ControlFeeder(arm, () -> joy2.getButton(GamepadKeys.Button.A), () -> joy2.getButton(GamepadKeys.Button.B));
 
 
 
@@ -102,7 +113,7 @@ public class RobotContainer {
 
     public ParallelCommandGroup getTeleOpCommands(){
         new GamepadButton(joy1, GamepadKeys.Button.BACK).whenReleased(switchMode);
-        return new ParallelCommandGroup(mecanumDrive, spinCarousel);
+        return new ParallelCommandGroup(mecanumDrive, spinCarousel, controlArm, controlFeeder);
     }
 
 

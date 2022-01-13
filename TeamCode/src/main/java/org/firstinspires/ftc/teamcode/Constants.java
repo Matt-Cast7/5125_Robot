@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.geometry.Vector2d;
 
+@Config
 public class Constants {
 
     public static double CPR = 1120;
@@ -14,6 +16,11 @@ public class Constants {
     public static double gearRatio = 16.0/32.0;
 
     public static double distancePerPulse = 0;
+
+    public static double kS = 0;
+    public static double kCos = 0;
+    public static double kV = 0;
+    public static double Ka = 0;
 
 
     public static int inchesToTicks(double inches){
