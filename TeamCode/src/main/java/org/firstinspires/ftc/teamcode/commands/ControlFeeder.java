@@ -29,6 +29,8 @@ public class ControlFeeder extends CommandBase {
             m_arm.setFeeder(power);
         }else if(rspin.getAsBoolean()){
             m_arm.setFeeder(-power);
+        }else{
+            m_arm.setFeeder(0);
         }
     }
 

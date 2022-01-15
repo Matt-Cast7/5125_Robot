@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.LED;
 
 import org.firstinspires.ftc.teamcode.commands.CarouselBlue;
 import org.firstinspires.ftc.teamcode.commands.CarouselRed;
@@ -34,6 +35,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Gyro;
+import org.firstinspires.ftc.teamcode.subsystems.LEDS;
 import org.firstinspires.ftc.teamcode.subsystems.Odo;
 
 public class RobotContainer {
@@ -43,6 +45,7 @@ public class RobotContainer {
     public Carousel carousel;
     public SampleMecanumDrive drive;
     public Arm arm;
+    public static LEDS leds;
 
     public Command mecanumDrive;
 
@@ -75,7 +78,8 @@ public class RobotContainer {
         m_DriveTrain = new DriveTrain(hwMap);
         carousel = new Carousel(hwMap);
 
-        arm = new Arm(hwMap);
+        arm = new Arm(hwMap, t_telemetry);
+
 
         mecanumDrive = new MecanumDriveTrain(m_DriveTrain,
                 gyro,
@@ -128,8 +132,6 @@ public class RobotContainer {
 
         warehouse = new Warehouse(m_DriveTrain);
         drive = new SampleMecanumDrive(hwMap);
-
-
 
 
 

@@ -52,7 +52,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 @Disabled
 @Autonomous(group = "drive")
 public class DriveVelocityPIDTuner extends LinearOpMode {
-    public static double DISTANCE = 20; // in
+    public static double DISTANCE = 40; // in
 
     enum Mode {
         DRIVER_MODE,

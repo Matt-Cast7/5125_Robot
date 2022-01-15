@@ -17,10 +17,14 @@ public class Constants {
 
     public static double distancePerPulse = 0;
 
-    public static double kS = 0;
-    public static double kCos = 0;
-    public static double kV = 0;
+    public static double kS = 0.1;
+    public static double kCos = 0.1;
+    public static double kV = 0.8;
     public static double Ka = 0;
+
+    public static double m_power = 0.8;
+
+    public static int ninetydegrees = 228;
 
 
     public static int inchesToTicks(double inches){

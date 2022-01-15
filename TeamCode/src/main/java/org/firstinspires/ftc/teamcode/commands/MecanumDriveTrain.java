@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Gyro;
+import org.firstinspires.ftc.teamcode.subsystems.LEDS;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -43,6 +45,11 @@ public class MecanumDriveTrain extends CommandBase {
         this.telemetry = telemetry;
 
         addRequirements(m_DriveTrain);
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     @Override
